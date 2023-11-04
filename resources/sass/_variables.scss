@@ -2,8 +2,18 @@
 $body-bg: #f8fafc;
 
 
-$primary:red;
-$secondary:pink;
+$primary: #81173d;
+$secondary: #000;
+
+$container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1130px,
+);
+
+$paragraph-margin-bottom: 0.9rem;
+
 
 // Typography
 $font-family-sans-serif: 'Nunito', sans-serif;
