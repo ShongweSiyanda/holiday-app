@@ -1,8 +1,8 @@
 <template>
     <div class="holiday-input mb-3">
-        <label for="year" class="mb-1">{{ label }}</label> <br>
+        <label :for="label" class="mb-1">{{ label }}</label> <br>
         <select
-            id="year"
+            :id="label"
             class="w-100 px-3 py-2 border-primary border-1 rounded-2 bg-white"
             v-model="selectedValue"
             @change="$emit('update:modelValue', selectedValue)"
