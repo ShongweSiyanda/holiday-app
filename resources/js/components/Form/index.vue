@@ -2,40 +2,43 @@
     <form @submit.prevent="getHolidays">
         <div class="row">
             <div class="col-lg-5">
-                <div class="holiday-input mb-3">
-                    <label for="countries">Country:</label> <br>
-                    <select id="countries" class="w-100 px-3 py-2 border-primary border-1 rounded-2 bg-white"
-                            v-model="holidayForm.country" autocomplete="on">
-                        <option value="" selected>Select a Country</option>
-                        <option v-for="(country,x) in supportedCountriesData" :value="country.countryCode" :key="x">
-                            {{ country.fullName }}
-                        </option>
-                    </select>
-                    <small v-if="holidayFormState.country" class="text-danger"><i>{{
-                            holidayFormState.country
-                        }}</i></small>
-                </div>
+                <drop-down-select
+                    label="Country"
+                    v-model="holidayForm.country"
+                    :error="holidayFormState.country"
+                    :options="supportedCountriesData"
+                    displayKey="fullName"
+                    valueKey="countryCode"
+                />
             </div>
             <div class="col-lg-5">
                 <div class="holiday-input mb-3">
-                    <label for="countries">Year:</label> <br>
-                    <select id="countries" class="w-100 px-3 py-2 border-primary border-1 rounded-2 bg-white"
-                            v-model="holidayForm.year" autocomplete="on">
-                        <option value="" selected>Select a Year</option>
-                        <option v-for="(year,y) in years" :value="year.value" :key="y">
-                            {{ year.value }}
-                        </option>
-                    </select>
-                    <small v-if="holidayFormState.year" class="text-danger"><i>{{ holidayFormState.year }}</i></small>
+                    <drop-down-select
+                        label="Year"
+                        v-model="holidayForm.year"
+                        :error="holidayFormState.year"
+                        :options="years"
+                        displayKey="value"
+                        valueKey="value"
+                    />
                 </div>
             </div>
             <div class="col-lg-2 pt-lg-4">
-                <button type="submit" class="btn btn-primary w-100" v-if="!holidayFormState.is_loading">search</button>
-                <button type="submit" class="btn btn-primary w-100" v-else disabled><i>searching...</i></button>
+                <search-button
+                    label="search"
+                    v-if="!holidayFormState.is_loading"
+                    :disabled="false"
+                />
+                <search-button
+                    label="loading..."
+                    v-else
+                    :disabled="true"
+                />
             </div>
-            <div class="col-lg-12 py-4">
+            <div class="col-lg-12 pt-4 pb-0">
                 <data-display v-if="holidayData.length > 0" :data="holidayData"/>
-                <div class="alert border-primary border-1 text-primary alert-dismissible mb-0 text-center" role="alert" v-if="holidayData.error">
+                <div class="alert border-primary border-1 text-primary alert-dismissible mb-0 text-center" role="alert"
+                     v-if="holidayData.error">
                     <i>No holidays were found for this country in the year <span class="fw-bold">{{
                             holidayForm.year
                         }}</span> <br> Consider selecting more
@@ -51,10 +54,12 @@
 <script setup>
 import axios from 'axios'
 import {onMounted, reactive, ref} from "vue"
-import {useEnums} from "@/composables/useEnums.js";
+import {useEnums} from "@/composables/useEnums.js"
 import DataDisplay from '../DataDisplay/index.vue'
+import SearchButton from '../Form/SearchButton/index.vue'
+import DropDownSelect from '../Form/DropDownSelect/index.vue'
 
-const holidayData = ref([])
+let holidayData = ref([])
 
 let supportedCountriesData = ref([])
 
@@ -73,7 +78,8 @@ const holidayForm = reactive({
 
 const getCountries = async () => {
     try {
-        let response = await axios.get('/api/countries')
+        const url = 'api/countries'
+        let response = await axios.get(url)
 
         if (response.status === 200) {
             supportedCountriesData.value = response.data
@@ -103,11 +109,9 @@ const getHolidays = async () => {
 
         await axios.get(url, {params})
             .then(response => {
-
                 if (response.status === 200) {
                     holidayData.value = response.data
                     holidayFormState.is_loading = false
-                    console.log(holidayData.value)
                 }
             })
             .catch(error => {
