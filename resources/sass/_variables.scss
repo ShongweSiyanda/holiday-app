@@ -3,6 +3,11 @@ $secondary: #000;
 
 $table-bg:transparent;
 
+$table-color:$primary;
+
+$table-hover-color: #fff;
+$table-hover-bg-factor: .075;
+$table-hover-bg:$primary;
 
 $container-max-widths: (
     sm: 540px,
