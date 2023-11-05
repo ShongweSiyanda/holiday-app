@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('countries', [HolidayController::class, 'getCountries']);
+Route::get('holidays',[HolidayController::class,'getHolidaysForYear']);
