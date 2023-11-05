@@ -30,11 +30,12 @@
                 </div>
             </div>
             <div class="col-lg-2 pt-lg-4">
-                <button type="submit" class="btn btn-primary w-100">search</button>
+                <button type="submit" class="btn btn-primary w-100" v-if="!holidayFormState.is_loading">search</button>
+                <button type="submit" class="btn btn-primary w-100" v-else disabled><i>searching...</i></button>
             </div>
             <div class="col-lg-12 py-4">
                 <data-display v-if="holidayData.length > 0" :data="holidayData"/>
-                <div class="alert alert-danger alert-dismissible text-center" role="alert" v-if="holidayData.error">
+                <div class="alert border-primary border-1 text-primary alert-dismissible mb-0 text-center" role="alert" v-if="holidayData.error">
                     <i>No holidays were found for this country in the year <span class="fw-bold">{{
                             holidayForm.year
                         }}</span> <br> Consider selecting more

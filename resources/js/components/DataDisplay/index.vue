@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table class="table table-striped border-primary border-2">
+        <table class="table border-primary border-2">
             <thead>
             <tr>
                 <th scope="col" class="text-primary">Date</th>
@@ -12,7 +12,7 @@
             <tr v-for="(holiday, i) in data" :key="i">
                 <td class="text-primary">
                     <p class="mb-0">{{formatDate(holiday.date.day,holiday.date.month,holiday.date.year)}}</p>
-                    <p class="mb-0 text-primary fw-bold" v-if="holiday.observedOn"><i>(Observed on : {{formatDate(holiday.observedOn.day,holiday.observedOn.month,holiday.observedOn.year)}})</i></p>
+                    <p class="mb-0 text-primary fw-bold" v-if="holiday.observedOn"><i>(Observed on: {{formatDate(holiday.observedOn.day,holiday.observedOn.month,holiday.observedOn.year)}})</i></p>
                 </td>
                 <td>
                     <p class="mb-0 text-primary" v-for="(name,x) in holiday.name" :key="x">

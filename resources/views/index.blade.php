@@ -6,10 +6,10 @@
     <title>Holidays App</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    @vite(['resources/sass/app.scss'])
+    @vite(['resources/sass/app.scss','resources/css/app.css'])
 </head>
 <body>
-<div id="app">
+<div id="app" class="bg-secondary min-vh-100 bg-opacity-50">
     <main class="container mx-auto py-lg-5 py-4">
         <home-component></home-component>
     </main>
