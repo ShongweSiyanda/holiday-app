@@ -41,11 +41,11 @@
             <div class="col-lg-12 pt-3 pb-0">
                 <data-display v-if="holidayData.length > 0" :data="holidayData"/>
                 <div class="alert border-primary border-1 text-primary alert-dismissible mb-0 text-center" role="alert"
-                     v-if="holidayData.error">
+                     v-if="holidayData.error || holidayFormState.is_empty">
                     <i>No holidays were found for this country in the year <span class="fw-bold">{{
                             holidayForm.year
                         }}.</span> <br> Consider selecting more
-                        recent years. </i>
+                        recent years.</i>
                 </div>
                 <div class="text-primary text-center" v-if="holidayFormState.is_loading"><i>Loading...</i></div>
             </div>
@@ -71,6 +71,7 @@ const holidayFormState = reactive({
     country: '',
     is_valid: false,
     is_loading: false,
+    is_empty: false,
 })
 
 const holidayForm = reactive({
@@ -115,6 +116,9 @@ const getHolidays = async () => {
                 if (response.status === 200) {
                     holidayData.value = response.data
                     holidayFormState.is_loading = false
+
+                    //if response is an empty array - display a friendly message to the user
+                    holidayFormState.is_empty = holidayData.value.length === 0;
                 }
             })
             .catch(error => {
