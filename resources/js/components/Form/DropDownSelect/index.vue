@@ -3,7 +3,7 @@
         <label :for="label" class="mb-1">{{ label }}</label> <br>
         <select
             :id="label"
-            class="w-100 px-3 py-2 border-primary border-1 rounded-2 bg-white"
+            class="w-100 px-3 py-2 border-primary border-1 rounded-2 bg-white bg-opacity-25"
             v-model="selectedValue"
             @change="$emit('update:modelValue', selectedValue)"
             autocomplete="on"

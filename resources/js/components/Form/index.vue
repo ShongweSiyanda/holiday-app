@@ -1,6 +1,9 @@
 <template>
     <form @submit.prevent="getHolidays">
         <div class="row">
+            <div class="col-lg-12 text-center pt-3">
+                <h5 class="text-primary">Choose a country and a year to view a list of holidays specific to that country:</h5>
+            </div>
             <div class="col-lg-5">
                 <drop-down-select
                     label="Country"
