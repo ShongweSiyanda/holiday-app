@@ -16,3 +16,9 @@ The backend of this web app is built using Laravel version 10. Here are the tech
 - Object-Oriented Programming (OOP).
 - Repository Pattern Design.
 - Vue Composition API Style.
+
+### Testing: PHPUnit
+
+- I've written test cases for all the logic in my controller and repository methods.
+- The test case methods are located in `tests/Feature`
+- To execute them run the `php artisan test` command.
