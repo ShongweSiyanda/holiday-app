@@ -1,40 +1,48 @@
 <template>
     <form @submit.prevent="getHolidays">
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-5">
                 <div class="holiday-input mb-3">
                     <label for="countries">Country:</label> <br>
-                    <select id="countries" class="w-100 px-3 py-1 border-primary border-1 rounded-2 bg-white"
+                    <select id="countries" class="w-100 px-3 py-2 border-primary border-1 rounded-2 bg-white"
                             v-model="holidayForm.country" autocomplete="on">
                         <option value="" selected>Select a Country</option>
                         <option v-for="(country,x) in supportedCountriesData" :value="country.countryCode" :key="x">
                             {{ country.fullName }}
                         </option>
                     </select>
-                    <small v-if="holidayFormErrorState.country" class="text-danger"><i>{{
-                            holidayFormErrorState.country
+                    <small v-if="holidayFormState.country" class="text-danger"><i>{{
+                            holidayFormState.country
                         }}</i></small>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-5">
                 <div class="holiday-input mb-3">
                     <label for="countries">Year:</label> <br>
-                    <select id="countries" class="w-100 px-3 py-1 border-primary border-1 rounded-2 bg-white"
+                    <select id="countries" class="w-100 px-3 py-2 border-primary border-1 rounded-2 bg-white"
                             v-model="holidayForm.year" autocomplete="on">
                         <option value="" selected>Select a Year</option>
                         <option v-for="(year,y) in years" :value="year.value" :key="y">
                             {{ year.value }}
                         </option>
                     </select>
-                    <small v-if="holidayFormErrorState.year" class="text-danger"><i>{{ holidayFormErrorState.year }}</i></small>
+                    <small v-if="holidayFormState.year" class="text-danger"><i>{{ holidayFormState.year }}</i></small>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <button type="submit">Submit</button>
+            <div class="col-lg-2 pt-lg-4">
+                <button type="submit" class="btn btn-primary w-100">search</button>
             </div>
-            <div class="col-lg-12" v-if="holidayData.length > 0">
-                <data-display :data="holidayData"/>
+            <div class="col-lg-12 py-4">
+                <data-display v-if="holidayData.length > 0" :data="holidayData"/>
+                <div class="alert alert-danger alert-dismissible text-center" role="alert" v-if="holidayData.error">
+                    <i>No holidays were found for this country in the year <span class="fw-bold">{{
+                            holidayForm.year
+                        }}</span> <br> Consider selecting more
+                        recent years </i>
+                </div>
+                <div class="text-primary text-center" v-if="holidayFormState.is_loading"><i>Loading...</i></div>
             </div>
+
         </div>
     </form>
 </template>
@@ -49,10 +57,11 @@ const holidayData = ref([])
 
 let supportedCountriesData = ref([])
 
-const holidayFormErrorState = reactive({
+const holidayFormState = reactive({
     year: '',
     country: '',
-    holiday_type: '',
+    is_valid: false,
+    is_loading: false,
 })
 
 const holidayForm = reactive({
@@ -67,7 +76,6 @@ const getCountries = async () => {
 
         if (response.status === 200) {
             supportedCountriesData.value = response.data
-            // console.log(supportedCountriesData)
         }
     } catch (error) {
         console.log(error)
@@ -78,26 +86,13 @@ onMounted(() => {
     getCountries()
 })
 
-const {years} = useEnums()
-
 const getHolidays = async () => {
 
-    holidayData.value = []
+    holidayFormState.is_valid = validateFields(holidayForm.country, holidayForm.year)
 
-    holidayFormErrorState.year = ""
-    holidayFormErrorState.country = ""
-    holidayFormErrorState.holiday_type = ""
+    if (holidayFormState.is_valid) {
 
-
-    if (!holidayForm.country) {
-        holidayFormErrorState.country = 'Please select country'
-
-    }
-    if (!holidayForm.year) {
-        holidayFormErrorState.year = 'Please select year'
-    }
-
-    if (holidayForm.country !== "" && holidayForm.year !== "") {
+        holidayFormState.is_loading = true
 
         const url = '/api/holidays'
         const params = {
@@ -107,20 +102,44 @@ const getHolidays = async () => {
 
         await axios.get(url, {params})
             .then(response => {
-                holidayData.value = response.data
-                console.log(holidayData.value)
+
+                if (response.status === 200) {
+                    holidayData.value = response.data
+                    holidayFormState.is_loading = false
+                    console.log(holidayData.value)
+                }
             })
             .catch(error => {
                 console.log("error", error)
+                holidayFormState.is_loading = false
             })
+    }
+}
+
+const validateFields = (field1, field2) => {
+    holidayData.value = []
+
+    let isValid = false
+
+    holidayFormState.year = ""
+    holidayFormState.country = ""
 
 
+    if (!field1) {
+        holidayFormState.country = 'Please select country'
+    }
+    if (!field2) {
+        holidayFormState.year = 'Please select year'
     }
 
+    if (holidayForm.country !== '' && holidayForm.year !== '') {
+        isValid = true
+    }
 
-    console.log("country:", holidayForm.country)
-    console.log("year:", holidayForm.year)
+    return isValid
 }
+
+const {years} = useEnums()
 
 </script>
 

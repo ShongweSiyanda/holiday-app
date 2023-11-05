@@ -15,9 +15,5 @@ use App\Http\Controllers\HolidayController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::get('countries', [HolidayController::class, 'getCountries']);
 Route::get('holidays',[HolidayController::class,'getHolidaysForYear']);

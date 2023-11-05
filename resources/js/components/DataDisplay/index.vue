@@ -1,27 +1,28 @@
 <template>
     <div>
-        <table class="table table-striped">
+        <table class="table table-striped border-primary border-2">
             <thead>
             <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Holiday Name(s)</th>
-                <th scope="col">Holiday Type</th>
-                <th scope="col">Observed On</th>
+                <th scope="col" class="text-primary">Date</th>
+                <th scope="col" class="text-primary">Holiday Name(s)</th>
+                <th scope="col" class="text-primary">Holiday Type</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(holiday, i) in data" :key="i">
-                <td>{{formatDate(holiday.date.day,holiday.date.month,holiday.date.year)}}</td>
+                <td class="text-primary">
+                    <p class="mb-0">{{formatDate(holiday.date.day,holiday.date.month,holiday.date.year)}}</p>
+                    <p class="mb-0 text-primary fw-bold" v-if="holiday.observedOn"><i>(Observed on : {{formatDate(holiday.observedOn.day,holiday.observedOn.month,holiday.observedOn.year)}})</i></p>
+                </td>
                 <td>
-                    <p class="mb-0" v-for="(name,x) in holiday.name" :key="x">
+                    <p class="mb-0 text-primary" v-for="(name,x) in holiday.name" :key="x">
                        ({{x+1}}) {{name.text}} <b>({{name.lang}})</b>
                     </p>
                 </td>
-                <td><p class="mb-0 text-capitalize">{{formatType(holiday.holidayType)}}</p></td>
                 <td>
-                    <p class="mb-0" v-if="holiday.observedOn">{{holiday.observedOn.day}}-{{holiday.observedOn.month}}-{{holiday.observedOn.year}}</p>
-                    <p class="mb-0">-</p>
+                    <p class="mb-0 text-primary text-capitalize">{{formatType(holiday.holidayType)}}</p>
                 </td>
+
             </tr>
             </tbody>
         </table>
@@ -38,14 +39,11 @@ const formatType = (value) =>{
 }
 
 const formatDate = (day,month,year) =>{
-
     const months = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ]
-
-    const formattedDay = day < 10 ? `0${day}` : day;
-
+    const formattedDay = day < 10 ? `0${day}` : day
     return `${formattedDay} ${months[month - 1]} ${year}`
 }
 
