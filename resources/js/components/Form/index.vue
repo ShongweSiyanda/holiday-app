@@ -56,9 +56,7 @@
 </template>
 
 <script setup>
-import axios from 'axios'
-import {onMounted, reactive, ref} from "vue"
-import {useEnums} from "@/composables/useEnums.js"
+import {onMounted} from "vue"
 import DataDisplay from '../DataDisplay/index.vue'
 import SearchButton from '../Form/SearchButton/index.vue'
 import DropDownSelect from '../Form/DropDownSelect/index.vue'
@@ -80,8 +78,6 @@ onMounted(() => {
     getCountries()
     generateYears()
 })
-
-//console.log('years', years.value)
 
 </script>
 
