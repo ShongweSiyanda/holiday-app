@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import Form from '@/components/Form/index.vue'
+import Form from '../components/Form/index.vue'
 </script>
 
 <style scoped>

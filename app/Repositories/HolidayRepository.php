@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Repositories\Interfaces\HolidayRepositoryInterface;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 
 class HolidayRepository implements HolidayRepositoryInterface
 {
@@ -30,6 +31,32 @@ class HolidayRepository implements HolidayRepositoryInterface
 
     public function getHolidaysForYear(string $country, string $year): array
     {
+
+        //option 1 validation
+
+        $validated_data = request()->validate([
+            'year' => 'required|date_format:Y',
+            'country' => 'required|string',
+        ]);
+
+        //option 2 validator class
+
+       /* $rules = [
+            'year' => 'required|date_format:Y',
+            'country' => 'required|string',
+        ];
+
+        $data = [
+            'year' => $year,
+            'country' => $country,
+        ];
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return ['error' => $validator->errors()->first()];
+        }*/
+
         $response = Http::get("$this->base_url/getHolidaysForYear?year=$year&country=$country&holidayType=all");
         $status_code = $response->status();
 
